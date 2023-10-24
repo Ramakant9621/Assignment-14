@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        #carousel-container {
+            position: relative;
+            width: 70%;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            justify-content: center;
+            
+        }
+
+        .slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+
+        #controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+
+        .control-btn {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #indicators {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: #bbb;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .indicator.active {
+            background-color: #3498db;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="carousel-container">
+        <div id="carousel">
+            <!-- Slides will be dynamically added here -->
+        </div>
+
+        <div id="controls">
+            <button class="control-btn" onclick="prevSlide()">Previous</button>
+            <button class="control-btn" onclick="nextSlide()">Next</button>
+        </div>
+
+        <div id="indicators"></div>
+    </div>
+
+    <script>
+        // Fetch images from pw skills website
+        const images = [
+    'image1.jpeg',
+    'image2.jpeg',
+    'image4.jpeg',
+  ];
+
+        // Create slides dynamically
+        const carousel = document.getElementById('carousel');
+        const indicatorsContainer = document.getElementById('indicators');
+
+        images.forEach((image, index) => {
+            const slide = document.createElement('div');
+            slide.className = 'slide';
+            slide.innerHTML = `<img src="${image}" alt="Slide ${index + 1}">`;
+            carousel.appendChild(slide);
+
+            const indicator = document.createElement('div');
+            indicator.className = 'indicator';
+            indicator.addEventListener('click', () => goToSlide(index));
+            indicatorsContainer.appendChild(indicator);
+        });
+
+        let currentIndex = 0;
+
+        function updateCarousel() {
+            carousel.style.transform = `translateX(${-currentIndex * 100}%)`;
+
+            // Update indicators
+            const indicators = document.querySelectorAll('.indicator');
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            currentIndex = index;
+            updateCarousel();
+        }
+
+        updateCarousel(); // Initial update
+    </script>
+
+</body>
+
+</html>
